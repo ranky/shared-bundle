@@ -1,0 +1,41 @@
+parameters:
+  excludePaths:
+    - ../../tests/config/*
+    - ../../tests/src/TestKernel.php
+    - ../../tests/src/BaseIntegrationTestCase.php
+    - ../../src/Infrastructure/DependencyInjection/Configuration.php
+    - ../../src/Common/ClassHelper.php
+    - ../../src/Infrastructure/Persistence/DQL
+  reportUnmatchedIgnoredErrors: false
+  ignoreErrors:
+    - '#(.*)\\Icu\\IntlDateFormatter(.*)#'
+    - '#^Call to method getManager\(\) on an unknown class doctrine#'
+    - '#Parameter (.*) \$classOrId of static method(.*)#'
+    - '#Cannot call method dispatch\(\) on Doctrine\\ORM\\Query\\AST\\Node(.*)#'
+    - '#Property (.*) is never written, only read#'
+    - '#Property (.*)\$medias (.*)Doctrine\\Common\\Collections\\Collection(.*) does not accept(.*)#'
+    -
+      message: '#Cannot cast array\|bool\|float\|int\|string\|null to string#'
+      paths:
+        - ../../src/Infrastructure/Site/SiteUrlResolver.php
+    -
+      message: '#Cannot call method getTokenStream\(\)#'
+      paths:
+        - ../../src/Filter/QueryParser/Parser.php
+    -
+      message: '#Cannot call method toArray\(\)#'
+      paths:
+        - ../../src/Filter/QueryParser/Parser.php
+    -
+      message: '#While loop condition is always true#'
+      paths:
+        - ../../src/Filter/QueryParser/AST.php
+    -
+      message: '#Unreachable statement - code above always terminates#'
+      paths:
+        - ../../src/Filter/QueryParser/AST.php
+    -
+      message: '#Unsafe usage of new static\(\)#'
+      paths:
+        - ../../src/Domain/ValueObject
+        - ../../src/Filter/Criteria.php
