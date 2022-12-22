@@ -10,7 +10,6 @@ trait DateAtTrait
 {
 
     #[ORM\Column(name: 'created_at', type: Types::DATETIME_IMMUTABLE)]
-    #[ORM\OrderBy(['createdAt' => 'ASC'])]
     private \DateTimeImmutable $createdAt;
 
 
