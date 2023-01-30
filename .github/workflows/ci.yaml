@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+    pull_request:
+      branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      debug_enabled:
+        type: boolean
+        description: 'Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)'
+        required: false
+        default: false
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch all history for all branches and tags
+      - name: Install Docker Compose plugin
+        run: |
+          DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+          mkdir -p $DOCKER_CONFIG/cli-plugins
+          curl -SL https://github.com/docker/compose/releases/download/v2.15.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+          chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+      - name: Build and start containers with --wait flag
+        run: make docker-up
+      - name: Check containers
+        if: ${{ inputs.debug_enabled }}
+        run: make docker -- ps -a
+      - name: Analyze code with PHPStan
+        run: make phpstan-ci
+      - name: Setup tmate session
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
+        uses: mxschmitt/action-tmate@v3
+          #        with:
+        #limit-access-to-actor: true
+      - name: Analyze code PHP CS Fixer
+        run: make php-cs-fixer-ci
+      - name: Run PHPUnit tests
+        run: make phpunit-ci
+      - name: Stop and remove containers
+        if: always()
+        run: make docker-down
