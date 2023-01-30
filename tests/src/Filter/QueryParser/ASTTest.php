@@ -14,7 +14,7 @@ use Ranky\SharedBundle\Filter\QueryParser\TokenGrammar;
 class ASTTest extends TestCase
 {
 
-    public function testItShouldConvertQueryToValidAST(): void
+    public function testItShouldConvertQueryStringToValidASTForFilter(): void
     {
         $lexer = new Lexer("(eq('title','bar') or eq('title','baz')) or like('title','baz@gmail.com')");
         $ast   = new AST($lexer->tokenize());
