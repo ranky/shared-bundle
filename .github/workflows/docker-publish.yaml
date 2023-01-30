@@ -54,7 +54,7 @@ jobs:
         with:
           push: ${{ github.event_name != 'pull_request' }}
           context: .
-          file: tools/docker/php-fpm/build.build.Dockerfile
+          file: tools/docker/php-fpm/build.Dockerfile
           build-args: |
             HOST_UID=1001
             HOST_GID=1001
@@ -74,7 +74,7 @@ jobs:
         with:
           push: ${{ github.event_name != 'pull_request' }}
           context: .
-          file: tools/docker/mariadb/build.build.Dockerfile
+          file: tools/docker/mariadb/build.Dockerfile
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-mariadb:latest
           labels: ${{ steps.meta-mariadb.outputs.labels }}
           cache-from: type=gha
