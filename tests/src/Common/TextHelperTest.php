@@ -19,7 +19,7 @@ class TextHelperTest extends TestCase
      */
     public function testItShouldTruncateString(string $input, int $length, string $expected): void
     {
-        $this->assertSame(TextHelper::truncate($input, $length), $expected);
+        $this->assertSame($expected, TextHelper::truncate($input, $length));
     }
 
     /**
@@ -32,7 +32,7 @@ class TextHelperTest extends TestCase
             ['<p>this is a string with HTML</p>', 30, 'this is a string with HTML'],
             ['<p>this is a string with [shortcode]shortcodes[/shortcode] shortcodes</p>', 200, 'this is a string with shortcodes'],
             ['<p>this is a string with [shortcode] shortcodes</p>', 200, 'this is a string with shortcodes'],
-            ['this is a string', 10, 'this is...'],
+            ['this is a string', 10, 'this is a...'],
         ];
     }
 

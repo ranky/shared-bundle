@@ -119,7 +119,7 @@ class AST implements \IteratorAggregate
             {
 
                 $node = new CompositeOperatorNode($token);
-                $node->addAttribute('operator', \mb_strtolower($token->value()));
+                $node->addAttribute('operator', \strtolower($token->value()));
 
                 return $node;
             }

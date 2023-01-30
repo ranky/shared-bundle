@@ -8,13 +8,17 @@ class TextHelper
 {
     public static function truncate(string $value, int $length = 30, string $separator = '...'): string
     {
-        $value = \strip_tags(html_entity_decode($value));
+        $value = \strip_tags(\html_entity_decode($value));
         // Remove shortcode, format [shortcode] or [shortcode]shortcodes[/shortcode]
         $value = (string)\preg_replace('/\[(.*?)\](.*?(\[\/\1\]))?/', '', $value);
         // remove whitespace
-        $value = (string)preg_replace('/\s+/', ' ', $value);
+        $value = (string)\preg_replace('/\s+/', ' ', $value);
 
-        return \mb_strimwidth($value, 0, $length, $separator, 'utf-8');
+        if (\strlen($value) > $length) {
+            return \trim(\substr($value, 0, $length)).$separator;
+        }
+
+        return $value;
     }
 
     /**
@@ -98,8 +102,8 @@ class TextHelper
                 // maximum lenght is reached, so get off the loop
                 break;
             }
-                $truncate     .= $lineMatching[2];
-                $total_length += $content_length;
+            $truncate     .= $lineMatching[2];
+            $total_length += $content_length;
 
 
             // if the maximum length is reached, get off the loop
@@ -144,7 +148,7 @@ class TextHelper
 
     public static function snakeCase(string $text): string
     {
-        return \ctype_lower($text) ? $text : \mb_strtolower(
+        return \ctype_lower($text) ? $text : \strtolower(
             (string)\preg_replace('/([^A-Z\s])([A-Z])/', '$1_$2', $text)
         );
     }
@@ -153,7 +157,7 @@ class TextHelper
     {
 
         return \ucfirst(
-            \mb_strtolower(
+            \strtolower(
                 \trim(
                     (string)\preg_replace(
                         [

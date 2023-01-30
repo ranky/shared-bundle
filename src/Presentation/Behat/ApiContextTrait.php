@@ -30,11 +30,11 @@ trait ApiContextTrait
 
 
         foreach ($headers as $headerName => $headerValue) {
-            if (mb_strtolower((string)$headerName) === 'content-type') {
+            if (\strtolower((string)$headerName) === 'content-type') {
                 $server['CONTENT_TYPE'] = $headerValue ?? '';
                 continue;
             }
-            $headerName          = 'HTTP_'.str_replace('-', '_', \mb_strtoupper((string)$headerName));
+            $headerName          = 'HTTP_'.\str_replace('-', '_', \strtoupper((string)$headerName));
             $server[$headerName] = $headerValue;
         }
 
@@ -44,7 +44,7 @@ trait ApiContextTrait
             $this->parameters,
             $this->files,
             $server,
-            \json_encode($this->body, JSON_THROW_ON_ERROR)
+            \json_encode($this->body, \JSON_THROW_ON_ERROR)
         );
     }
 
@@ -156,8 +156,8 @@ trait ApiContextTrait
      */
     public function json(string $content): string
     {
-        return json_encode(
-            json_decode(trim($content), true, 512, JSON_THROW_ON_ERROR),
+        return \json_encode(
+            \json_decode(\trim($content), true, 512, JSON_THROW_ON_ERROR),
             JSON_THROW_ON_ERROR
         );
     }
@@ -169,12 +169,12 @@ trait ApiContextTrait
     public function jsonRawToArray(string $content): array
     {
         // trim(preg_replace('/\s+/', '', $content))
-        return json_decode(trim($content), true, 512, JSON_THROW_ON_ERROR);
+        return \json_decode(\trim($content), true, 512, JSON_THROW_ON_ERROR);
     }
 
     public function normalizeJsonExpression(string $expression): string
     {
-        return str_replace('response.', '', $expression);
+        return \str_replace('response.', '', $expression);
     }
 
     public function normalizeInput(string $regexValue): string

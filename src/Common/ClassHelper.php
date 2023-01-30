@@ -19,14 +19,14 @@ class ClassHelper
     {
         $className = \is_object($class) ? $class::class : $class;
 
-        $hasNamespace = \mb_strrpos($className, '\\');
+        $hasNamespace = \strrpos($className, '\\');
         if ($hasNamespace) {
-            $className = \mb_substr($className, $hasNamespace + 1);
+            $className = \substr($className, $hasNamespace + 1);
         }
 
-        $hasClassMethod = \mb_strrpos($className, '::');
+        $hasClassMethod = \strrpos($className, '::');
         if ($hasClassMethod) {
-            $className = \mb_substr($className, 0, $hasClassMethod);
+            $className = \substr($className, 0, $hasClassMethod);
         }
 
         return $className;

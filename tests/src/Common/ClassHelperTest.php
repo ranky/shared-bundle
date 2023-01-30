@@ -42,6 +42,7 @@ class ClassHelperTest extends TestCase
      *
      * @param object $input
      * @param array<string, mixed> $expected
+     * @throws \ReflectionException
      * @return void
      */
     public function testItShouldConvertObjectToArray(object $input, array $expected): void

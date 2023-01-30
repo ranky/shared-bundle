@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Ranky\SharedBundle\Infrastructure\Site;
@@ -22,11 +23,11 @@ class SiteUrlResolver implements SiteUrlResolverInterface
     public function siteUrl(?string $path = ''): string
     {
         if ($path) {
-            $path = ltrim($path, '/');
+            $path = \ltrim($path, '/');
         }
 
         if ($this->parameterBag->has('site_url')) {
-            return rtrim((string)$this->parameterBag->get('site_url'), '/').'/'.$path;
+            return \rtrim((string)$this->parameterBag->get('site_url'), '/').'/'.$path;
         }
         $routerContext = $this->router->getContext();
         if ($this->parameterBag->has('router.request_context.scheme')) {
@@ -40,19 +41,20 @@ class SiteUrlResolver implements SiteUrlResolverInterface
         if ($routerContext->getHost()) {
             $url = $routerContext->getScheme().'://'.$routerContext->getHost();
 
-            return rtrim($url, '/').'/'.$path;
+            return \rtrim($url, '/').'/'.$path;
         }
         try {
             if ($this->router->match('/')) {
                 $url = $this->router->generate(
                     $this->router->match('/')['_route'],
-                    [], //_locale https://symfony.com/doc/6.0/routing.html#generating-urls-in-services
+                    [], // _locale https://symfony.com/doc/6.0/routing.html#generating-urls-in-services
                     UrlGeneratorInterface::ABSOLUTE_URL
                 );
 
-                return rtrim($url, '/').'/'.$path;
+                return \rtrim($url, '/').'/'.$path;
             }
-        }catch (NoConfigurationException|RouteNotFoundException){}
+        } catch (NoConfigurationException|RouteNotFoundException) {
+        }
 
         $url = 'http';
         if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
@@ -60,8 +62,8 @@ class SiteUrlResolver implements SiteUrlResolverInterface
             $url = 'https';
         }
         $url .= '://'.$_SERVER['HTTP_HOST'];
-        $url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
+        $url .= \str_replace(\basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
 
-        return rtrim($url, '/').'/'.$path;
+        return \rtrim($url, '/').'/'.$path;
     }
 }

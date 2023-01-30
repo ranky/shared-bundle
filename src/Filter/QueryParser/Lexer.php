@@ -73,7 +73,7 @@ class Lexer
                     $value,
                     $type,
                     $position,
-                    $position + \mb_strlen($value)
+                    $position + \strlen($value)
                 )
             );
         }

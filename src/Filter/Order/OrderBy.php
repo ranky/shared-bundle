@@ -55,7 +55,7 @@ class OrderBy
     {
         return new self(
             $data['field'] ?? self::DEFAULT_ORDER_FIELD,
-            $data['direction'] ? \mb_strtoupper($data['direction']) : self::DEFAULT_ORDER_DIRECTION
+            $data['direction'] ? \strtoupper($data['direction']) : self::DEFAULT_ORDER_DIRECTION
         );
     }
 }
