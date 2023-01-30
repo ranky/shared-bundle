@@ -7,6 +7,43 @@ namespace Ranky\SharedBundle\Common;
 class FileHelper
 {
 
+    /**
+     * Normalize a non-existing file path into a directory path
+     *
+     * @param string $path
+     * @return string
+     */
+    public static function normalizeDirectoryPath(string $path): string
+    {
+        $parts = \explode(\DIRECTORY_SEPARATOR, $path);
+        $last = \end($parts);
+        if (\str_contains($last, '.')) {
+            \array_pop($parts);
+        }
+        return \DIRECTORY_SEPARATOR.\rtrim(
+            \implode(\DIRECTORY_SEPARATOR, $parts),
+            \DIRECTORY_SEPARATOR
+            );
+    }
+
+    /**
+     * Join paths
+     * @param ...$paths
+     * @return string
+     */
+    public static function pathJoin(...$paths): string
+    {
+        $cleanPaths = \array_map(static function ($path) {
+            return \trim($path, \DIRECTORY_SEPARATOR);
+        }, $paths);
+
+        return \sprintf(
+            '%s%s',
+            \DIRECTORY_SEPARATOR,
+            \implode(\DIRECTORY_SEPARATOR, \array_filter($cleanPaths))
+        );
+    }
+
     public static function basename(string $fileName): string
     {
         return UrlHelper::slug(\pathinfo($fileName, \PATHINFO_FILENAME));

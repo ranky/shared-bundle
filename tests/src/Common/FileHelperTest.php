@@ -11,6 +11,56 @@ class FileHelperTest extends TestCase
 {
 
     /**
+     * @dataProvider dataProviderForPathJoin
+     * @param string $expected
+     * @param string $paths
+     * @return void
+     */
+    public function testItShouldPathJoin(string $expected, ...$paths): void
+    {
+        $this->assertSame($expected, FileHelper::pathJoin(...$paths));
+
+    }
+
+    /**
+     * @return array<int, array{string, string}>
+     */
+    public function dataProviderForPathJoin(): array
+    {
+        return [
+            ['/foo/bar/baz', 'foo', 'bar', 'baz'],
+            ['/foo/bar/baz', '/foo/', 'bar/', '/baz'],
+            ['/foo', 'foo'],
+            ['/foo/pedro.jpg', '/foo/pedro.jpg'],
+            ['/foo/pedro.jpg', '/foo','pedro.jpg'],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderForNormalizePath
+     * @param string $input
+     * @param string $expected
+     * @return void
+     */
+    public function testItShouldNormalizePath(string $input, string $expected): void
+    {
+        $this->assertSame($expected, FileHelper::normalizeDirectoryPath($input));
+    }
+
+    /**
+     * @return array<int, array{string, string}>
+     */
+    public function dataProviderForNormalizePath(): array
+    {
+        return [
+            ['foo','/foo'],
+            ['foo/','/foo'],
+            ['foo/bar','/foo/bar'],
+            ['foo/bar/baz.jpg','/foo/bar'],
+        ];
+    }
+
+    /**
      * @dataProvider dataProviderForBaseName
      * @param string $input
      * @param string $expected
