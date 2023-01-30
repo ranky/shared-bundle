@@ -23,7 +23,7 @@ class FileHelper
         return \DIRECTORY_SEPARATOR.\rtrim(
             \implode(\DIRECTORY_SEPARATOR, $parts),
             \DIRECTORY_SEPARATOR
-            );
+        );
     }
 
     /**
@@ -33,9 +33,7 @@ class FileHelper
      */
     public static function pathJoin(string ...$paths): string
     {
-        $cleanPaths = \array_map(static function ($path) {
-            return \trim($path, \DIRECTORY_SEPARATOR);
-        }, $paths);
+        $cleanPaths = \array_map(static fn ($path) => \trim($path, \DIRECTORY_SEPARATOR), $paths);
 
         return \sprintf(
             '%s%s',
