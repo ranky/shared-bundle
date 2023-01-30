@@ -3,7 +3,7 @@ version: "3.7"
 services:
   php:
     build:
-      dockerfile: ./tools/docker/php-fpm/ci.build.Dockerfile
+      dockerfile: ./tools/docker/php-fpm/ci.Dockerfile
   mariadb:
     build:
       dockerfile: tools/docker/mariadb/ci.Dockerfile
