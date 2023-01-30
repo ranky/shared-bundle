@@ -28,10 +28,10 @@ class FileHelper
 
     /**
      * Join paths
-     * @param ...$paths
+     * @param string ...$paths
      * @return string
      */
-    public static function pathJoin(...$paths): string
+    public static function pathJoin(string ...$paths): string
     {
         $cleanPaths = \array_map(static function ($path) {
             return \trim($path, \DIRECTORY_SEPARATOR);
