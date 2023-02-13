@@ -9,6 +9,7 @@ use Ranky\SharedBundle\Infrastructure\Site\SiteUrlResolver;
 use Ranky\SharedBundle\Tests\BaseIntegrationTestCase;
 use Ranky\SharedBundle\Domain\Site\SiteUrlResolverInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 
 class SiteUrlResolverTest extends BaseIntegrationTestCase
@@ -27,7 +28,8 @@ class SiteUrlResolverTest extends BaseIntegrationTestCase
     {
         $parameterBag = new ParameterBag([]);
         $router = $this->getService(RouterInterface::class);
-        $siteUrlResolver = new SiteUrlResolver($parameterBag, $router);
+        $requestStack = $this->getService(RequestStack::class);
+        $siteUrlResolver = new SiteUrlResolver($parameterBag, $requestStack, $router);
         $this->assertSame('http://localhost/', $siteUrlResolver->siteUrl());
     }
 
@@ -36,7 +38,8 @@ class SiteUrlResolverTest extends BaseIntegrationTestCase
         $parameterBag = new ParameterBag([]);
         $parameterBag->set('router.request_context.scheme', 'https');
         $router = $this->getService(RouterInterface::class);
-        $siteUrlResolver = new SiteUrlResolver($parameterBag, $router);
+        $requestStack = $this->getService(RequestStack::class);
+        $siteUrlResolver = new SiteUrlResolver($parameterBag, $requestStack, $router);
         $this->assertSame('https://localhost/', $siteUrlResolver->siteUrl());
     }
 

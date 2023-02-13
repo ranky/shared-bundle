@@ -1,28 +1,26 @@
 TMP_ENV := $(DOCKER_ENV)
 CI_ENABLED = $(if $(CI),true,false)
 ENV_FILE = .env
-# if exists .env.test, include in DOCKER_COMPOSE variable
-ifneq (,$(wildcard .env.test))
-	ENV_FILE = .env.test
-# if exists .env.$(DOCKER_ENV), include it and override .env
+
+### Docker Environment ###
+ifneq (,$(wildcard .env.local))
+	ENV_FILE = .env.local
 else ifneq (,$(wildcard .env.$(DOCKER_ENV)))
 	ENV_FILE = .env.$(DOCKER_ENV)
 else
 	ENV_FILE = .env
 endif
 
-include $(ENV_FILE) # Docker
+include $(ENV_FILE)
 
-### Start: only for test ###
-# if exists .env file, then use it
-ifneq (,$(wildcard tests/.env))
+### Symfony Environment Test  ###
+ifneq (,$(wildcard tests/.env.local))
+	include tests/.env.local
+else ifneq (,$(wildcard tests/.env.$(DOCKER_ENV)))
+	include tests/.env.$(DOCKER_ENV)
+else
 	include tests/.env
 endif
-# if exists tests/.env.test, include it and override .env
-ifneq (,$(wildcard tests/.env.test))
-	include tests/.env.test
-endif
-### End: only for test ###
 
 # override DOCKER_ENV from parameter if TMP_ENV is not empty
 ifneq ($(TMP_ENV),)

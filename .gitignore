@@ -5,11 +5,13 @@
 **/vendor
 **/node_modules
 /public/bundles/
-/tests/.env.*
-.env.*
 /.env.local
 /.env.local.php
 /.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/tests/.env.local
+/tests/.env.local.php
+/tests/.env.*.local
 **/composer.lock
 tools/phpunit/.phpunit.result.cache
 tools/php-cs-fixer/php-cs-fixer.cache
