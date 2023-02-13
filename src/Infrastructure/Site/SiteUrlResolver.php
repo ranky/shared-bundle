@@ -29,7 +29,7 @@ class SiteUrlResolver implements SiteUrlResolverInterface
             return \rtrim((string)$this->parameterBag->get('site_url'), '/').'/'.$path;
         }
         if ($this->requestStack->getCurrentRequest()) {
-            return $this->requestStack->getCurrentRequest()->getUriForPath($path ?? '/');
+            return $this->requestStack->getCurrentRequest()->getUriForPath('/'.$path);
         }
 
         $routerContext = $this->router->getContext();
