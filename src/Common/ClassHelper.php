@@ -9,8 +9,6 @@ class ClassHelper
 {
 
     /**
-     * @see https://stackoverflow.com/a/25472778
-     *
      * @param string|object $class
      *
      * @return string
