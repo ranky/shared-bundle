@@ -5,13 +5,13 @@ namespace Ranky\SharedBundle\Tests\Dummy\User\Infrastructure;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Ranky\SharedBundle\Tests\Dummy\User\Domain\UserRepositoryInterface;
+use Ranky\SharedBundle\Tests\Dummy\User\Domain\UserRepository;
 use Ranky\SharedBundle\Tests\Dummy\User\Domain\User;
 
 /**
  * @extends ServiceEntityRepository<User>
  */
-final class DoctrineOrmUserRepository extends ServiceEntityRepository implements UserRepositoryInterface
+final class DoctrineOrmUserRepository extends ServiceEntityRepository implements UserRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

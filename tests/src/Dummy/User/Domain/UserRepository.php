@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Ranky\SharedBundle\Tests\Dummy\User\Domain;
 
 
-interface UserRepositoryInterface
+interface UserRepository
 {
     /**
      * @return array<User>

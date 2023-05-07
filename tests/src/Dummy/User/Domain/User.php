@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace Ranky\SharedBundle\Tests\Dummy\User\Domain;
 
+
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 
 #[ORM\Entity]
-#[ORM\Table(name: 'user')]
+#[ORM\Table(name: '`user`')]
 class User implements UserInterface
 {
 
@@ -62,6 +63,12 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
     /**
      * @see PasswordAuthenticatedUserInterface
      */
@@ -98,16 +105,16 @@ class User implements UserInterface
         return $this->username;
     }
 
-    public function setEmail(string $username): self
+    public function setEmail(string $email): self
     {
-        $this->username = $username;
+        $this->email = $email;
 
         return $this;
     }
 
     public function getEmail(): string
     {
-        return $this->username;
+        return $this->email;
     }
 
     public function getUserIdentifier(): string
