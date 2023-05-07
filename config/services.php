@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 
 use Ranky\SharedBundle\Domain\Event\DomainEventPublisher;
 use Ranky\SharedBundle\Domain\Event\InMemoryDomainEventPublisher;
-use Ranky\SharedBundle\Domain\Site\SiteUrlResolverInterface;
+use Ranky\SharedBundle\Domain\Site\SiteUrlResolver;
 use Ranky\SharedBundle\Filter\Attributes\CriteriaValueResolver;
 use Ranky\SharedBundle\Filter\Pagination\OffsetPagination;
-use Ranky\SharedBundle\Infrastructure\Site\SiteUrlResolver;
+use Ranky\SharedBundle\Infrastructure\Persistence\Orm\UidMapperPlatform;
+use Ranky\SharedBundle\Infrastructure\Site\SymfonySiteUrlResolver;
 
 return static function (ContainerConfigurator $configurator) {
     $services = $configurator->services()
@@ -33,8 +36,15 @@ return static function (ContainerConfigurator $configurator) {
     $services->set(InMemoryDomainEventPublisher::class);
     $services->alias(DomainEventPublisher::class, InMemoryDomainEventPublisher::class);
 
-    $services->set(SiteUrlResolver::class);
-    $services->alias(SiteUrlResolverInterface::class, SiteUrlResolver::class);
+    // Behat
+    $services
+        ->load('Ranky\\SharedBundle\\Presentation\\Behat\\', '../src/Presentation/Behat/*')
+        ->exclude([
+            '../src/Presentation/Behat/ApiContextTrait.php'
+        ]);
+
+    $services->set(SymfonySiteUrlResolver::class);
+    $services->alias(SiteUrlResolver::class, SymfonySiteUrlResolver::class);
 
     /* Criteria: Override service for new $paginationLimit */
     $services->set(CriteriaValueResolver::class)->args([

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Ranky\SharedBundle\Infrastructure\Site;
 
-use Ranky\SharedBundle\Domain\Site\SiteUrlResolverInterface;
+use Ranky\SharedBundle\Domain\Site\SiteUrlResolver;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class SiteUrlResolver implements SiteUrlResolverInterface
+class SymfonySiteUrlResolver implements SiteUrlResolver
 {
 
     public function __construct(
@@ -53,17 +53,6 @@ class SiteUrlResolver implements SiteUrlResolverInterface
             return \rtrim($url, '/').'/'.$path;
         }
 
-        $url = 'http';
-        if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
-            || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) {
-            $url = 'https';
-        }
-        $url .= '://'.$_SERVER['HTTP_HOST'];
-        if (isset($_SERVER['SERVER_PORT']) && '80' !== $_SERVER['SERVER_PORT'] && '443' !== $_SERVER['SERVER_PORT']) {
-            $url .= ':'.$_SERVER['SERVER_PORT'];
-        }
-        $url .= \str_replace(\basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
-
-        return \rtrim($url, '/').'/'.$path;
+        return (new ServerSiteUrlResolver())->siteUrl($path);
     }
 }
