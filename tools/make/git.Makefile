@@ -98,7 +98,7 @@ git-tag: ## create new tag version && push
 	@echo "Pushing tag $(NEXT_GIT_TAG_VERSION)..."
 	git push --atomic origin HEAD --tags
 
-## with date: https://stackoverflow.com/a/21759466/2046442
+## other option with date: https://stackoverflow.com/a/21759466/2046442
 git-tag-from-last-commit: ## create new tag version from last commit && push
 	@echo "Updating tags from remote..."
 	git fetch --all --tags --force
