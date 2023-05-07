@@ -12,6 +12,7 @@
 /tests/.env.local
 /tests/.env.local.php
 /tests/.env.*.local
+/tests/public
 **/composer.lock
 tools/phpunit/.phpunit.result.cache
 tools/php-cs-fixer/php-cs-fixer.cache
