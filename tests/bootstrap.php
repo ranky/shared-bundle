@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Ranky\SharedBundle\Tests\TestKernel;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Dotenv\Dotenv;
 
@@ -52,10 +51,15 @@ $application->run(
     new ArrayInput([
         'command' => 'doctrine:schema:update',
         '--force' => true,
+        '--complete' => true,
     ]),
     new ConsoleOutput()
 );
 
-
-$queryFixtures = "INSERT INTO user (username,password,email,roles) VALUES ('jcarlos','password','jcarlos@test.test','[\"ROLE_ADMIN\",\"ROLE_USER\"]'),('pedro','password','pedro@test.test','[\"ROLE_USER\"]')";
-$application->run(new StringInput(sprintf('%s "%s"', 'dbal:run-sql', \addslashes($queryFixtures))));
+$application->run(
+    new ArrayInput([
+        'command' => 'doctrine:fixtures:load',
+        '--no-interaction' => true,
+        '--env' => 'test',
+    ])
+);

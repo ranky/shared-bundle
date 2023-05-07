@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Ranky\SharedBundle\Tests;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
 use FriendsOfBehat\SymfonyExtension\Bundle\FriendsOfBehatSymfonyExtensionBundle;
 use Ranky\SharedBundle\RankySharedBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
@@ -29,6 +30,7 @@ class TestKernel extends Kernel
             new SecurityBundle(),
             new TwigBundle(),
             new RankySharedBundle(),
+            new DoctrineFixturesBundle(),
             new FriendsOfBehatSymfonyExtensionBundle(),
         ];
     }
@@ -39,13 +41,12 @@ class TestKernel extends Kernel
         ContainerBuilder $builder
     ): void {
         $container->import('../config/*.php');
-        $container->import('../config/services.php');
         // $builder->register('logger', NullLogger::class);
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
-        //$routes->import('@RankySharedBundle/config/routes.php');
+        $routes->import('../config/routes.yaml');
     }
 
     public function getCacheDir(): string
