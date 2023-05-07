@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Ranky\SharedBundle\Infrastructure\Persistence\Dbal;
+namespace Ranky\SharedBundle\Tests\Infrastructure\Persistence\Dbal;
 
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use PHPUnit\Framework\TestCase;
