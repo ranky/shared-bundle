@@ -25,7 +25,7 @@ class SymfonySiteUrlResolver implements SiteUrlResolver
             $path = \ltrim($path, '/');
         }
 
-        if ($this->parameterBag->get('site_url')) {
+        if ($this->parameterBag->has('site_url')) {
             /** @var string $url */
             $url = $this->parameterBag->get('site_url');
             return \rtrim($url, '/').'/'.$path;
@@ -35,7 +35,7 @@ class SymfonySiteUrlResolver implements SiteUrlResolver
         }
 
         $routerContext = $this->router->getContext();
-        if ($this->parameterBag->get('router.request_context.scheme')) {
+        if ($this->parameterBag->has('router.request_context.scheme')) {
             /** @var string $routerScheme */
             $routerScheme = $this->parameterBag->get('router.request_context.scheme');
             $routerContext->setScheme($routerScheme);
