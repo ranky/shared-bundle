@@ -8,6 +8,9 @@ namespace Ranky\SharedBundle\Tests\Dummy\Page\Infrastructure\Persistence\Dbal\Ty
 use Ranky\SharedBundle\Infrastructure\Persistence\Dbal\Types\JsonCollectionType;
 use Ranky\SharedBundle\Tests\Dummy\Page\Domain\PageCollection;
 
+/**
+ * @extends JsonCollectionType<\Ranky\SharedBundle\Tests\Dummy\Page\Domain\Page>
+ */
 class PageCollectionType extends JsonCollectionType
 {
 

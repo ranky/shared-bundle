@@ -8,10 +8,14 @@ namespace Ranky\SharedBundle\Tests\Dummy\Page\Domain;
 
 interface PageRepository
 {
+    /**
+     * @param int $id
+     * @return Page
+     */
     public function getById(int $id): Page;
 
     /**
-     * @return array<Page>
+     * @return array<int,Page>
      */
     public function getAll(): array;
 

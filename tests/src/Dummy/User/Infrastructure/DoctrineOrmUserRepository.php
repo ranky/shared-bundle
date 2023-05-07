@@ -19,19 +19,34 @@ final class DoctrineOrmUserRepository extends ServiceEntityRepository implements
     }
 
 
+    /**
+     * @return array<int,User>
+     */
     public function getAll(): array
     {
-        return $this->findAll();
+        /** @var array<int,User> $users */
+        $users = $this->findAll();
+        return $users;
     }
 
-    public function getById(int $id): ?User
+    public function getById(int $id): User
     {
-        return $this->find($id);
+        /** @var User|null $user */
+        $user = $this->find($id);
+        if (!$user) {
+            throw new \RuntimeException('User not found');
+        }
+        return $user;
     }
 
-    public function getByUsername(string $username): ?User
+    public function getByUsername(string $username): User
     {
-        return $this->findOneBy(['username' => $username]);
+        /** @var User|null $user */
+        $user =  $this->findOneBy(['username' => $username]);
+        if (!$user) {
+            throw new \RuntimeException('User not found');
+        }
+        return $user;
     }
 
     public function save(User $user): void

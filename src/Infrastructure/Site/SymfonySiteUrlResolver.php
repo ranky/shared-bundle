@@ -25,20 +25,26 @@ class SymfonySiteUrlResolver implements SiteUrlResolver
             $path = \ltrim($path, '/');
         }
 
-        if ($this->parameterBag->has('site_url')) {
-            return \rtrim((string)$this->parameterBag->get('site_url'), '/').'/'.$path;
+        if ($this->parameterBag->get('site_url')) {
+            /** @var string $url */
+            $url = $this->parameterBag->get('site_url');
+            return \rtrim($url, '/').'/'.$path;
         }
         if ($this->requestStack->getCurrentRequest()) {
             return $this->requestStack->getCurrentRequest()->getUriForPath('/'.$path);
         }
 
         $routerContext = $this->router->getContext();
-        if ($this->parameterBag->has('router.request_context.scheme')) {
-            $routerContext->setScheme((string)$this->parameterBag->get('router.request_context.scheme'));
+        if ($this->parameterBag->get('router.request_context.scheme')) {
+            /** @var string $routerScheme */
+            $routerScheme = $this->parameterBag->get('router.request_context.scheme');
+            $routerContext->setScheme($routerScheme);
             $this->router->setContext($routerContext);
         }
         if ($this->parameterBag->has('router.request_context.host')) {
-            $routerContext->setHost((string)$this->parameterBag->get('router.request_context.host'));
+            /** @var string $routerHost */
+            $routerHost = $this->parameterBag->get('router.request_context.host');
+            $routerContext->setHost($routerHost);
             $this->router->setContext($routerContext);
         }
         if ($routerContext->getHost()) {

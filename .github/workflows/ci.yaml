@@ -51,6 +51,8 @@ jobs:
         run: make php-cs-fixer-ci
       - name: Run PHPUnit tests
         run: make phpunit-ci
+      - name: Run Behat tests
+        run: make behat-ci
       - name: Stop and remove containers
         if: always()
         run: make docker-down

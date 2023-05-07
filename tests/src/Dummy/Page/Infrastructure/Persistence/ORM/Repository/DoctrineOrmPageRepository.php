@@ -10,6 +10,9 @@ use Ranky\SharedBundle\Tests\Dummy\Page\Domain\Page;
 use Ranky\SharedBundle\Tests\Dummy\Page\Domain\PageRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<Page>
+ */
 class DoctrineOrmPageRepository extends ServiceEntityRepository implements PageRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -17,14 +20,28 @@ class DoctrineOrmPageRepository extends ServiceEntityRepository implements PageR
         parent::__construct($registry, Page::class);
     }
 
+    /**
+     * @param int $id
+     * @return Page
+     */
     public function getById(int $id): Page
     {
-        return $this->find($id);
+        /** @var Page|null $page */
+        $page = $this->find($id);
+        if (!$page) {
+            throw new \RuntimeException('Page not found');
+        }
+        return $page;
     }
 
+    /**
+     * @return array<int,Page>
+     */
     public function getAll(): array
     {
-        return $this->findAll();
+        /** @var array<int,Page> $pages */
+        $pages = $this->findAll();
+        return $pages;
     }
 
     public function save(Page $page): void
