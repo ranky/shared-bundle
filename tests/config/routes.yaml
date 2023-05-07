@@ -1,0 +1,7 @@
+controllers:
+    resource: ../src/Dummy/Page/Presentation/
+    type: attribute
+
+kernel:
+    resource: Ranky\SharedBundle\Tests\TestKernel
+    type: attribute

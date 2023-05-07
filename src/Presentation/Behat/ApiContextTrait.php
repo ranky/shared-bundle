@@ -48,6 +48,23 @@ trait ApiContextTrait
         );
     }
 
+    public static function getTmpPathForUpload(string $dummyFileName): string
+    {
+        $dummyFilePath = self::$kernel->getProjectDir().'/dummy/'.$dummyFileName;
+        $tmpFilePath   = self::$kernel->getCacheDir().'/'.$dummyFileName;
+        if (!copy($dummyFilePath, $tmpFilePath)) {
+            throw new \RuntimeException(
+                sprintf(
+                    'The file %s could not be copied. Check the file exists or the permissions of the directory %s',
+                    $dummyFilePath,
+                    self::$kernel->getCacheDir()
+                )
+            );
+        }
+
+        return $tmpFilePath;
+    }
+
     public function getStatusCode(): int
     {
         return $this->getSession()->getStatusCode();
@@ -74,7 +91,7 @@ trait ApiContextTrait
         $tokenStorage = self::$container->get('security.untracked_token_storage');
         $tokenStorage->setToken($token);
         /** @var \Symfony\Component\HttpFoundation\Session\SessionFactory $sessionFactory */
-        $sessionFactory =  self::$container->get('session.factory');
+        $sessionFactory = self::$container->get('session.factory');
         /** @var \Symfony\Component\HttpFoundation\Session\Session $session */
         $session = $sessionFactory->createSession();
         $session->set('_security_'.$firewallContext, serialize($token));

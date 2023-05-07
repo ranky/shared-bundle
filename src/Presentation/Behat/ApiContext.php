@@ -5,46 +5,14 @@ namespace Ranky\SharedBundle\Presentation\Behat;
 
 
 use Behat\Gherkin\Node\PyStringNode;
-use Behat\MinkExtension\Context\RawMinkContext;
 use PHPUnit\Framework\Assert;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 use function JmesPath\search as JSONSearch;
 
 
-abstract class AbstractApiContext extends RawMinkContext
+class ApiContext extends BaseApiContext
 {
-    use ApiContextTrait;
-
-    protected Crawler $crawler;
-    public static ContainerInterface $container;
-    public static KernelInterface $kernel;
-    /**
-     * @var array<string, mixed>
-     */
-    protected array $headers = [];
-    /**
-     * @var array<string,mixed>
-     */
-    protected array $files = [];
-    /**
-     * @var array<string,mixed>
-     */
-    protected array $body = [];
-    /**
-     * @var array<string,mixed>
-     */
-    protected array $parameters = [];
-
-    public function __construct(KernelInterface $kernel)
-    {
-        self::$kernel    = $kernel;
-        /** @phpstan-ignore-next-line */
-        self::$container = $kernel->getContainer()->get('test.service_container');
-    }
-
     /**
      * @Transform /^(\d+|"\d+")$/
      * @link https://behat.org/en/latest/user_guide/context/definitions.html#step-argument-transformations
@@ -88,6 +56,20 @@ abstract class AbstractApiContext extends RawMinkContext
     {
         $this->parameters = $this->jsonRawToArray($parameters->getRaw());
         $this->iSendRequestTo($method, $url);
+    }
+
+    /**
+     * @Given I attach the file :fileName to request with key :key
+     */
+    public function iAttachFileToRequest(string $fileName, string $key): void
+    {
+        $tmpFilePath       = self::getTmpPathForUpload($fileName);
+        $uploadedFile      = new UploadedFile(
+            $tmpFilePath,
+            $fileName,
+            \mime_content_type($tmpFilePath) ?: null
+        );
+        $this->files[$key] = $uploadedFile;
     }
 
 
@@ -139,6 +121,7 @@ abstract class AbstractApiContext extends RawMinkContext
      * @Then /^the response JSON expression match "([^"]+)" contains "([^"]+)"$/
      * @Then /^the response JSON expression match "([^"]+)" contains "([^"]+)" as "([^"]+)"$/
      *
+     * @throws \JsonException
      */
     public function theJSONExpressionMatchEqualTo(string $expression, string $content, string $type = null): void
     {
@@ -173,6 +156,20 @@ abstract class AbstractApiContext extends RawMinkContext
         ];
     }
 
+    /**
+     * @Then the number of results in the JSON response should be equal to :count
+     * @Then the number of results in the JSON response key :key should be equal to :count
+     * @throws \JsonException
+     */
+    public function theNumberOfResultsInTheResponseShouldBeEqualTo(int $count, ?string $key = null): void
+    {
+        $response = $this->getJSONResponseContentAsArray();
+        if ($key) {
+            $response = $response[$key];
+        }
+        Assert::assertCount($count, $response);
+    }
+
 
     /**
      * @Then the JSON response key :key should include:
@@ -205,6 +202,17 @@ abstract class AbstractApiContext extends RawMinkContext
     {
         $response = $this->getJSONResponseContentAsArray();
         Assert::assertTrue(\array_key_exists($key, $response) && empty($response[$key]));
+    }
+
+    /**
+     * @Then the JSON response key :key should be equal :value
+     * @throws \JsonException
+     */
+    public function theJSONResponseKeyShouldBeEqualToValue(string $key, mixed $value): void
+    {
+        $response = $this->getJSONResponseContentAsArray();
+        $key      = $this->normalizeJsonExpression($key);
+        Assert::assertEquals($value, $response[$key]);
     }
 
     /**

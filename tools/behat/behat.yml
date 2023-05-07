@@ -16,4 +16,4 @@ default:
     api:
       paths: [ tests/src/Presentation/Behat/features/api.feature ]
       contexts:
-        - Ranky\SharedBundle\Tests\Presentation\Behat\ApiMediaContext
+        - Ranky\SharedBundle\Presentation\Behat\ApiContext

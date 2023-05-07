@@ -21,11 +21,11 @@ return static function (FrameworkConfig $frameworkConfig): void {
         ->storageFactoryId('session.storage.factory.mock_file')
     ;
 
-/*    $frameworkConfig
+    $frameworkConfig
         ->router()
         ->utf8(true)
         ->strictRequirements(true)
-    ;*/
+    ;
 
     $frameworkConfig
         ->validation()
