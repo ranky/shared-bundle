@@ -32,7 +32,7 @@ abstract class AbstractDomainEvent implements DomainEvent
     ) {
         $this->aggregateId = $aggregateId;
         $this->payload     = $payload;
-        $this->eventId     = $eventId ?? (string)DomainEventId::generate();
+        $this->eventId     = $eventId ?? DomainEventId::create()->asString();
         $this->occurredOn  = $occurredOn ? $occurredOn->getTimestamp() : \time();
         $this->eventClass  = static::class;
         $this->eventName   = (new \ReflectionClass($this))->getShortName();

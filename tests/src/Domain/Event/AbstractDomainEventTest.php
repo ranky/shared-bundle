@@ -14,7 +14,7 @@ class AbstractDomainEventTest extends TestCase
 
     public function testItShouldCreateValidDomainEventObject(): void
     {
-        $aggregateId     = (string)DomainEventId::generate();
+        $aggregateId     = (string)DomainEventId::create();
         $occurredOn      = new \DateTimeImmutable();
         $testDomainEvent = new PageDomainEvent(
             $aggregateId,

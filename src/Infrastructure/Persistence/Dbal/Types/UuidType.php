@@ -5,23 +5,23 @@ namespace Ranky\SharedBundle\Infrastructure\Persistence\Dbal\Types;
 
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Ranky\SharedBundle\Domain\ValueObject\UlidValueObject;
+use Ranky\SharedBundle\Domain\ValueObject\UuidValueObject;
 
-abstract class UlidType extends BaseUidType
+abstract class UuidType extends BaseUidType
 {
     /**
      * @param $value
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
-     * @return UlidValueObject|null
+     * @return UuidValueObject|null
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?UlidValueObject
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?UuidValueObject
     {
-        if ($value instanceof UlidValueObject || null === $value) {
+        if ($value instanceof UuidValueObject || null === $value) {
             return $value;
         }
 
         $className = $this->getClass();
-        /** @var \Ranky\SharedBundle\Domain\ValueObject\UlidValueObject $className */
+        /** @var \Ranky\SharedBundle\Domain\ValueObject\UuidValueObject $className */
 
         return $className::fromString($value);
     }
@@ -30,7 +30,7 @@ abstract class UlidType extends BaseUidType
     {
         $toString = $this->hasNativeGuidType($platform) ? 'toRfc4122' : 'toBinary';
 
-        if ($value instanceof UlidValueObject) {
+        if ($value instanceof UuidValueObject) {
             return $value->$toString();
         }
 
@@ -39,7 +39,7 @@ abstract class UlidType extends BaseUidType
         }
 
         $className = $this->getClass();
-        /** @var UlidValueObject $className */
+        /** @var UuidValueObject $className */
         $value = $className::fromString($value);
 
         return $value->$toString();

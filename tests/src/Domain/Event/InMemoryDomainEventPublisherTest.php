@@ -74,7 +74,7 @@ class InMemoryDomainEventPublisherTest extends TestCase
     public function testItShouldCreateTwoSubscriberOfPageDomainEventAndPublishItInOrderOfPriority(): void
     {
         // Domain Event
-        $aggregateId     = (string)DomainEventId::generate();
+        $aggregateId     = (string)DomainEventId::create();
         $pageDomainEvent = new PageDomainEvent($aggregateId);
 
         // Subscribers to Domain Event

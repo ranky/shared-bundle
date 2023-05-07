@@ -25,6 +25,14 @@ class Page
     #[ORM\Column(type: Types::TEXT)]
     private string $description;
 
+    #[ORM\Column(type: 'page_ulid')]
+    private ?PageUlidValueObject $pageUlid = null;
+
+    #[ORM\Column(type: 'page_uuid')]
+    private ?PageUuidValueObject $pageUuid = null;
+
+    #[ORM\Column(type: 'page_collection')]
+    private ?PageCollection $pageCollection = null;
 
     public function __construct()
     {

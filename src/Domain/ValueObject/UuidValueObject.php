@@ -4,14 +4,13 @@ declare(strict_types=1);
 namespace Ranky\SharedBundle\Domain\ValueObject;
 
 
-use Symfony\Component\Uid\Ulid;
+use Symfony\Component\Uid\Uuid;
 
-class UlidValueObject extends Ulid implements UidValueObject
+class UuidValueObject extends Uuid implements UidValueObject
 {
-
     public static function create(): static
     {
-        return new static(Ulid::generate());
+        return new static(Uuid::v4()->__toString());
     }
 
     public function asRfc4122(): string
