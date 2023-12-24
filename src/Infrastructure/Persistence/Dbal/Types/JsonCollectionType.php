@@ -26,7 +26,7 @@ abstract class JsonCollectionType extends JsonType
     /**
      * @param $value
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
-     * @return Collection<T>
+     * @return Collection<T>|T[]
      * @throws \Doctrine\DBAL\Types\ConversionException
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): Collection
@@ -37,15 +37,14 @@ abstract class JsonCollectionType extends JsonType
             return $items;
         }
 
-        /*  @var \Ranky\SharedBundle\Domain\ValueObject\Collection $parentClass */
-        $parentClass = new ($this->collectionClass());
+        /** @var Collection<T> $collection */
+        $collection = new ($this->collectionClass());
 
         if (!$items) {
-            return $parentClass;
+            return $collection;
         }
 
-        /** @phpstan-ignore-next-line */
-        return $parentClass::fromArray($items);
+        return $collection::fromArray($items);
     }
 
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool
