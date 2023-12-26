@@ -66,6 +66,10 @@ class FileValueResolver implements MyValueResolverInterface
             return;
         }
 
+        if (!$file->isValid()) {
+            throw ValidationFailedException::fromThrowable(new \InvalidArgumentException($file->getErrorMessage()));
+        }
+
         $data = [
             'path'      => $file->getRealPath(),
             'name'      => $file->getClientOriginalName(),
