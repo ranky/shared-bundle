@@ -6,11 +6,20 @@ namespace Ranky\SharedBundle\Filter\Attributes;
 
 use Ranky\SharedBundle\Domain\Exception\ApiProblem\ApiProblemException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\HttpKernel\Exception\InvalidMetadataException;
 
-class CriteriaValueResolver implements ArgumentValueResolverInterface
+if (!\interface_exists('Symfony\Component\HttpKernel\Controller\ValueResolverInterface')) {
+    interface MyValueResolverInterface extends \Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface
+    {
+    }
+}else{
+    interface MyValueResolverInterface extends \Symfony\Component\HttpKernel\Controller\ValueResolverInterface
+    {
+    }
+}
+
+class CriteriaValueResolver implements MyValueResolverInterface
 {
     public function __construct(private readonly ?int $paginationLimit = null)
     {
@@ -38,6 +47,10 @@ class CriteriaValueResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
+        if (!$this->supports($request, $argument)) {
+            return [];
+        }
+
         $pagination = $request->query->all('page');
         /** @var array<Criteria> $criteriaAttributes */
         $criteriaAttributes = $argument->getAttributes();

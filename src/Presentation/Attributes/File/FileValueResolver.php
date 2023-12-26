@@ -5,16 +5,26 @@ declare(strict_types=1);
 namespace Ranky\SharedBundle\Presentation\Attributes\File;
 
 use Ranky\SharedBundle\Application\Dto\RequestDtoInterface;
-use Ranky\SharedBundle\Presentation\Attributes\AttributeValidator;
+use Ranky\SharedBundle\Domain\Exception\ApiProblem\ValidationFailedException;
 use Ranky\SharedBundle\Infrastructure\Validator\RequestAttributeValidator;
+use Ranky\SharedBundle\Presentation\Attributes\AttributeValidator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\HttpKernel\Exception\InvalidMetadataException;
 
 
-class FileValueResolver implements ArgumentValueResolverInterface
+if (!\interface_exists('Symfony\Component\HttpKernel\Controller\ValueResolverInterface')) {
+    interface MyValueResolverInterface extends \Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface
+    {
+    }
+} else {
+    interface MyValueResolverInterface extends \Symfony\Component\HttpKernel\Controller\ValueResolverInterface
+    {
+    }
+}
+
+class FileValueResolver implements MyValueResolverInterface
 {
 
     private RequestAttributeValidator $dtoValidatorResolver;
@@ -41,6 +51,10 @@ class FileValueResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
+        if (!$this->supports($request, $argument)) {
+            return;
+        }
+
         if (!$file = $request->files->get('file')) {
             yield null;
 
@@ -53,11 +67,11 @@ class FileValueResolver implements ArgumentValueResolverInterface
         }
 
         $data = [
-            'path' => $file->getRealPath(),
-            'name' => $file->getClientOriginalName(),
-            'mime' => $file->getMimeType() ?? $file->getClientMimeType(),
+            'path'      => $file->getRealPath(),
+            'name'      => $file->getClientOriginalName(),
+            'mime'      => $file->getMimeType() ?? $file->getClientMimeType(),
             'extension' => $file->guessExtension() ?? $file->getClientOriginalExtension(),
-            'size' => $file->getSize(),
+            'size'      => $file->getSize(),
         ];
 
         /* @var class-string<RequestDtoInterface> $type */
@@ -74,6 +88,9 @@ class FileValueResolver implements ArgumentValueResolverInterface
             $attributes[0]->getConstraint(),
             $attributes[0]->getGroups()
         );
+
+        dd($data, $attributeValidator);
+
 
         yield $this->dtoValidatorResolver->validate($attributeValidator, $data);
     }

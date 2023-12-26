@@ -7,11 +7,20 @@ use Ranky\SharedBundle\Application\Dto\RequestDtoInterface;
 use Ranky\SharedBundle\Presentation\Attributes\AttributeValidator;
 use Ranky\SharedBundle\Infrastructure\Validator\RequestAttributeValidator;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\HttpKernel\Exception\InvalidMetadataException;
 
-class BodyValueResolver implements ArgumentValueResolverInterface
+
+if (!\interface_exists('Symfony\Component\HttpKernel\Controller\ValueResolverInterface')) {
+    interface MyValueResolverInterface extends \Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface
+    {
+    }
+}else{
+    interface MyValueResolverInterface extends \Symfony\Component\HttpKernel\Controller\ValueResolverInterface
+    {
+    }
+}
+class BodyValueResolver implements MyValueResolverInterface
 {
 
     private RequestAttributeValidator $dtoValidatorResolver;
@@ -40,6 +49,9 @@ class BodyValueResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
+        if (!$this->supports($request, $argument)) {
+            return [];
+        }
 
         $data = \json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
