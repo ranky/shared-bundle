@@ -26,8 +26,8 @@ abstract class JsonCollectionType extends JsonType
     /**
      * @param $value
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
-     * @return Collection<T>|T[]
      * @throws \Doctrine\DBAL\Types\ConversionException
+     * @return Collection<T>|T[]
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): Collection
     {
