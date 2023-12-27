@@ -93,8 +93,6 @@ class FileValueResolver implements MyValueResolverInterface
             $attributes[0]->getGroups()
         );
 
-        dd($data, $attributeValidator);
-
 
         yield $this->dtoValidatorResolver->validate($attributeValidator, $data);
     }
