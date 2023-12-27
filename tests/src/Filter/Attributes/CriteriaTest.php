@@ -95,7 +95,8 @@ class CriteriaTest extends TestCase
     }
 
     public function controllerWithCriteriaAttributeAndPaginationLimit(
-        #[Criteria(paginationLimit: 100)] PageCriteria $pageCriteria
+        #[Criteria(paginationLimit: 100)]
+        PageCriteria $pageCriteria
     ): void {
     }
 

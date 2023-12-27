@@ -19,7 +19,8 @@ class InMemoryDomainEventPublisher implements DomainEventPublisher
      * @param iterable<DomainEventSubscriber> $domainEventSubscribers
      */
     public function __construct(
-        #[TaggedIterator(SharedBundleExtension::TAG_DOMAIN_EVENT_SUBSCRIBER)] iterable $domainEventSubscribers
+        #[TaggedIterator(SharedBundleExtension::TAG_DOMAIN_EVENT_SUBSCRIBER)]
+        iterable $domainEventSubscribers
     ) {
         $this->domainEventSubscribers = $domainEventSubscribers instanceof \Traversable
             ? \iterator_to_array($domainEventSubscribers)
